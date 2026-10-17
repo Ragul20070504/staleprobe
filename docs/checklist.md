@@ -13,10 +13,10 @@
 - [x] 11. Catalog example, injected HTTP/real metrics tests and Compose configuration implemented.
 - [x] 12. Dashboard, documentation, CI, clean consumer and package review.
 
-## Release gates not verified locally
+## Release validation (local and hosted)
 
 - [x] Run real Redis integration against a disposable service in GitHub Actions on Node 20/22/24.
-- [ ] Run live Compose/PostgreSQL/Prometheus/Grafana smoke test with Docker.
+- [x] Run live Docker Compose/PostgreSQL/Redis/Prometheus/Grafana smoke test and Chromium dashboard rendering in [CI run 39015176586](https://github.com/Ragul20070504/staleprobe/actions/runs/39015176586).
 - [x] Execute local core tests on Node 20/22/24.
 - [x] Execute GitHub Actions and inspect remote results: https://github.com/Ragul20070504/staleprobe/actions/runs/39012038895.
 - [x] Add real maintainer/repository metadata for Ragul20070504/staleprobe; recheck registry name (404 before initial release).

@@ -1,6 +1,6 @@
 # Validation and release status
 
-## Local evidence
+## Local and hosted evidence
 
 - The initial repository was empty with no commits or user files. During the initial build, no remote configuration was changed and no commits, push or publication were performed. The maintainer subsequently authorized publication to the connected Ragul20070504 GitHub profile and npm under the confirmed name staleprobe.
 - Core Vitest unit/property/lifecycle suite: 59 passing tests; one optional real-Redis test skipped without REDIS_URL. Tests include all verifier branches, deterministic sampling, finite cooldown/pattern state, queue/rate/concurrency behavior, rolling breaker/probe transitions, shutdown, disabled-mode resources and isolation of accidentally async extensions.
@@ -14,14 +14,15 @@
 - Local source validation: 59 tests passed and one real-Redis test skipped on Node 20.20.2, 22.23.3 and 24.18.0; two example tests passed. Hosted CI then passed with real Redis enabled on Node 20/22/24. No test failures remain. The final Windows/Node 24 run measured sampled-out p50/p95/p99 of 1.4/2.9/6.2 microseconds versus 0.1/0.1/0.1 direct, a p99 overhead of 6.1 microseconds. The release package contains 32 allowlisted files including CHANGELOG.md; the exact dry-run byte size can change with documentation updates.
 - The public source is available at https://github.com/Ragul20070504/staleprobe, under the confirmed maintainer profile. The initial source commit is b2d1922.
 - staleprobe@0.1.0 is published publicly at https://www.npmjs.com/package/staleprobe with the `latest` tag. A clean consumer successfully ran `npm install staleprobe`, resolved version 0.1.0, imported ESM and CommonJS and completed an asynchronous FRESH verification without ioredis installed. The registry tarball SHA-1 is `1025abacb8f97d037fd5ba9c9ef308e0ba3ef274`, matching the submitted artifact. Source commit d25d7bf is tagged v0.1.0. npm initially exposed a temporary placeholder while processing the upload; verification was repeated after the real version became public.
+- The complete Docker demo passed in [CI run 39015176586](https://github.com/Ragul20070504/staleprobe/actions/runs/39015176586): real PostgreSQL and Redis, normal miss/cache-hit flow, deliberate origin-only update, 1 FRESH and 2 STALE checks, zero Redis mutations during auditing, decreasing TTL, Prometheus scraping, all ten Grafana queries and Chromium rendering with actual staleness chart data. See [full-stack evidence](full-stack.md) and the recorded report/screenshot artifact. Containers were stopped after verification.
 
-## Explicitly unverified
+## Scope and limitations
 
 - A live Redis test in this local Windows environment: no configured disposable Redis URL/server was available. The same real-Redis test did pass in hosted CI.
-- Live PostgreSQL/Redis/Docker Compose, Prometheus scraping from a container and Grafana rendering/query execution: Docker was not installed. YAML/JSON validation, actual metrics-text tests and injected HTTP tests do not establish the full service stack works on this machine.
+- Docker is not installed on the original Windows machine. The complete PostgreSQL/Redis/Prometheus/Grafana demo was therefore verified on a hosted Ubuntu Docker runner, not on this workstation.
 - The core suite also passed locally with npm-provided Node 20.20.2 and 22.23.3 runtimes; remote GitHub Actions subsequently passed on Node 20/22/24.
 - README's illustrative external HTTP backend: it is not a real service. The runnable PostgreSQL example provides the complete application wiring instead.
-- Initial npm release metadata: staleprobe@0.1.0, npm maintainer ragul2007, source Ragul20070504/staleprobe. CLI authentication was verified. The [npm listing](https://www.npmjs.com/package/staleprobe) is the authoritative publication record. A live-service smoke test remains unverified locally.
+- Initial npm release metadata: staleprobe@0.1.0, npm maintainer ragul2007, source Ragul20070504/staleprobe. The [npm listing](https://www.npmjs.com/package/staleprobe) is the authoritative publication record. The Docker validation changes add test/development tooling and dashboard refinements; the published SDK remains 0.1.0.
 
 ## Self-review refinements and deviations
 
@@ -30,6 +31,6 @@
 - The second FRESH branch is unreachable for a transitive hash equivalence after the earlier equality branches. It remains implemented and tested with a non-transitive custom comparator as specified.
 - OTel histogram observations use synchronous hooks because its API cannot ingest aggregated bins. Custom exporters still receive bounded, exact histogram snapshots.
 - Shutdown cancels instead of draining. It normally completes after cancellation microtasks and at most three sequential exportTimeoutMs waits (an in-progress flush, final flush and exporter shutdown). Synchronous user code can still block Node's event loop.
-- No lint tool was configured; strict type checking and focused behavior tests are the automated code checks. No release or hosted CI execution is claimed.
+- No lint tool was configured; strict type checking, focused behavior tests and the real-service smoke test are the automated checks. The release and hosted results above were executed and verified; no production deployment or adoption is claimed.
 
-The implementation, local checks, hosted CI and initial public npm release are complete. A full live PostgreSQL/Redis/Prometheus/Grafana demo remains unverified.
+The implementation, local checks, hosted CI, complete Docker demo validation and initial public npm release are complete. Operational limitations remain documented in limitations.md; this is not a production-scale reliability claim.

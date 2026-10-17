@@ -1,0 +1,102 @@
+{
+  "startedAt": "2026-10-17T07:52:22.424Z",
+  "checks": {
+    "servicesHealthy": true,
+    "originThenCache": true,
+    "postgresChangedCacheUnchanged": true,
+    "observeOnly": {
+      "redisMutations": 0,
+      "initialTtlMs": 299999,
+      "finalTtlMs": 230829
+    },
+    "outcomes": {
+      "fresh": 1,
+      "stale": 2
+    },
+    "prometheus": {
+      "stale": [
+        {
+          "metric": {
+            "pattern": "product:*"
+          },
+          "value": [
+            1792223617.671,
+            "2"
+          ]
+        }
+      ],
+      "stalenessRate": [
+        {
+          "metric": {
+            "pattern": "product:*"
+          },
+          "value": [
+            1792223617.674,
+            "0.6666666666666666"
+          ]
+        }
+      ]
+    },
+    "grafanaStalenessRate": [
+      {
+        "metric": {
+          "pattern": "product:*"
+        },
+        "value": [
+          1792223617.722,
+          "1"
+        ]
+      }
+    ],
+    "grafanaDatasourceAndQueries": true,
+    "grafanaBrowserRate": {
+      "responses": 2,
+      "positivePoints": 1
+    },
+    "grafanaBrowserRendered": true
+  },
+  "panels": [
+    {
+      "title": "Staleness rate by pattern",
+      "validQueries": 1
+    },
+    {
+      "title": "Fresh and stale checks",
+      "validQueries": 1
+    },
+    {
+      "title": "Loader failures",
+      "validQueries": 1
+    },
+    {
+      "title": "Race and origin changes",
+      "validQueries": 1
+    },
+    {
+      "title": "Estimated entry age p50 / p95",
+      "validQueries": 2
+    },
+    {
+      "title": "Loader latency p50 / p95",
+      "validQueries": 2
+    },
+    {
+      "title": "Dropped work and isolated failures",
+      "validQueries": 1
+    },
+    {
+      "title": "Circuit breaker",
+      "validQueries": 1
+    },
+    {
+      "title": "Configured-hit coverage",
+      "validQueries": 1
+    },
+    {
+      "title": "Skipped checks and audit errors",
+      "validQueries": 1
+    }
+  ],
+  "completedAt": "2026-10-17T07:53:51.381Z",
+  "status": "passed"
+}

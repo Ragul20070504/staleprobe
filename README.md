@@ -150,6 +150,8 @@ npm run example:install
 
 Then follow [example startup instructions](example/README.md) for Docker Compose, `.env` setup and `npm run example:start`. `REDIS_URL=... npm test` enables the optional real-Redis test against a disposable service; shell syntax varies. CI runs that test with Redis. The package validator installs the packed artifact in a clean temporary project, runs ESM/CommonJS/JavaScript type checks without ioredis, checks README wiring and validates dashboard/Compose configuration. The quick start's placeholder HTTP backend requires your own endpoint.
 
+The **Full Docker demo** CI job also runs real PostgreSQL, Redis, Prometheus and Grafana, verifies stale-cache behavior without cache writes, and captures the dashboard in Chromium. See [full-stack results and reproduction steps](docs/full-stack.md).
+
 ## License and contributions
 
 MIT, see [LICENSE](LICENSE). Read [CONTRIBUTING.md](CONTRIBUTING.md) for changes, tests and release guidance. Publishing requires maintainer authorization. Before each release, confirm naming rights and metadata, review the package tarball and run the release checklist.
