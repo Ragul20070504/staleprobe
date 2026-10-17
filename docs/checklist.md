@@ -15,10 +15,10 @@
 
 ## Release gates not verified locally
 
-- [ ] Run real Redis integration against a disposable service.
+- [x] Run real Redis integration against a disposable service in GitHub Actions on Node 20/22/24.
 - [ ] Run live Compose/PostgreSQL/Prometheus/Grafana smoke test with Docker.
 - [x] Execute local core tests on Node 20/22/24.
-- [ ] Execute GitHub Actions and inspect remote results.
+- [x] Execute GitHub Actions and inspect remote results: https://github.com/Ragul20070504/staleprobe/actions/runs/39012038895.
 - [x] Add real maintainer/repository metadata for Ragul20070504/staleprobe; recheck registry name (404 before initial release).
 - [ ] Publish the initial npm release and verify a registry installation.
 
