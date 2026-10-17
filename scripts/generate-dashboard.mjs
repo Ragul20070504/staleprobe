@@ -6,7 +6,7 @@ function panel(title, description, exprs, unit = 'short', thresholds = [{ color:
   panels.push({ id, title, description, type: 'timeseries', datasource,
     gridPos: { x: (id - 1) % 2 * 12, y: Math.floor((id - 1) / 2) * 8, w: 12, h: 8 },
     targets: exprs.map(([expr, legendFormat], index) => ({ refId: String.fromCharCode(65 + index), expr, legendFormat, datasource })),
-    fieldConfig: { defaults: { unit, thresholds: { mode: 'absolute', steps: thresholds } }, overrides: [] },
+    fieldConfig: { defaults: { unit, ...(unit === 'percentunit' ? { min: 0, max: 1 } : title === 'Circuit breaker' ? { min: 0, max: 2 } : {}), thresholds: { mode: 'absolute', steps: thresholds } }, overrides: [] },
     options: { legend: { displayMode: 'table', placement: 'bottom' }, tooltip: { mode: 'multi' } },
   });
 }

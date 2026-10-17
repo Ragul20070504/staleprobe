@@ -135,12 +135,32 @@ try {
   page = await context.newPage();
   const browserErrors = [];
   page.on('pageerror', error => browserErrors.push(error.message));
+  const rateExpression = dashboard.dashboard.panels.find(panel => panel.title === 'Staleness rate by pattern').targets[0].expr;
+  const browserRate = { responses: 0, positivePoints: 0 };
+  evidence.checks.grafanaBrowserRate = browserRate;
+  page.on('response', response => {
+    if (!response.url().includes('/api/ds/query') || response.status() !== 200) return;
+    void (async () => {
+      const request = response.request().postDataJSON();
+      if (!request?.queries?.some(q => q.expr === rateExpression)) return;
+      browserRate.responses++;
+      const body = await response.json();
+      for (const result of Object.values(body.results ?? {})) {
+        for (const frame of result.frames ?? []) {
+          frame.schema.fields.forEach((field, index) => {
+            if (field.type === 'number') browserRate.positivePoints += frame.data.values[index].filter(value => Number.isFinite(value) && value > 0).length;
+          });
+        }
+      }
+    })().catch(error => { browserErrors.push(error.message); });
+  });
   const renderedQuery = page.waitForResponse(response => response.url().includes('/api/ds/query') && response.status() === 200, { timeout: 45000 });
   await page.goto(`${grafanaUrl}${dashboard.meta.url}?from=now-15m&to=now`, { waitUntil: 'domcontentloaded' });
   await renderedQuery;
   for (const panel of dashboard.dashboard.panels) {
     await page.getByText(panel.title, { exact: true }).first().waitFor({ state: 'visible', timeout: 30000 });
   }
+  await until('Grafana browser rate chart data', async () => browserRate.positivePoints, value => value > 0, 60_000);
   assert.equal(browserErrors.length, 0, 'Grafana must render without uncaught browser errors');
   await page.screenshot({ path: fileURLToPath(new URL('grafana.png', artifacts)), fullPage: true });
   evidence.checks.grafanaBrowserRendered = true;
