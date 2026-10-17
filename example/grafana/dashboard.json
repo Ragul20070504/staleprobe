@@ -1,0 +1,577 @@
+{
+  "uid": "staleprobe",
+  "title": "staleprobe — cache truth",
+  "schemaVersion": 39,
+  "version": 1,
+  "tags": [
+    "cache",
+    "staleprobe"
+  ],
+  "timezone": "browser",
+  "refresh": "10s",
+  "editable": true,
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "annotations": {
+    "list": []
+  },
+  "templating": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Staleness rate by pattern",
+      "description": "STALE / (FRESH + STALE). No conclusive checks means no data, not 0%.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "((sum by (pattern) (rate(cache_audit_checks_total{result=\"STALE\"}[5m])) or (0 * sum by (pattern) (rate(cache_audit_checks_total{result=~\"FRESH|STALE\"}[5m])))) / sum by (pattern) (rate(cache_audit_checks_total{result=~\"FRESH|STALE\"}[5m]))) and (sum by (pattern) (rate(cache_audit_checks_total{result=~\"FRESH|STALE\"}[5m])) > 0)",
+          "legendFormat": "{{pattern}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.01
+              },
+              {
+                "color": "red",
+                "value": 0.05
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 2,
+      "title": "Fresh and stale checks",
+      "description": "Conclusive check increases over five minutes.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pattern, result) (increase(cache_audit_checks_total{result=~\"FRESH|STALE\"}[5m]))",
+          "legendFormat": "{{pattern}} {{result}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 3,
+      "title": "Loader failures",
+      "description": "Origin errors and timeouts, excluded from staleness rate.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pattern) (rate(cache_audit_checks_total{result=\"LOADER_ERROR\"}[5m]))",
+          "legendFormat": "{{pattern}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 4,
+      "title": "Race and origin changes",
+      "description": "Inconclusive double reads, excluded from staleness rate.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 8,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pattern, result) (rate(cache_audit_checks_total{result=~\"RACE_IN_FLIGHT|ORIGIN_CHANGING\"}[5m]))",
+          "legendFormat": "{{pattern}} {{result}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 5,
+      "title": "Estimated entry age p50 / p95",
+      "description": "PTTL estimate assumes the configured original TTL. Separate outcomes.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.5, sum by (le, pattern, outcome) (rate(cache_audit_entry_age_seconds_bucket[5m])))",
+          "legendFormat": "{{pattern}} {{outcome}} p50",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        },
+        {
+          "refId": "B",
+          "expr": "histogram_quantile(0.95, sum by (le, pattern, outcome) (rate(cache_audit_entry_age_seconds_bucket[5m])))",
+          "legendFormat": "{{pattern}} {{outcome}} p95",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 6,
+      "title": "Loader latency p50 / p95",
+      "description": "Seconds per loader call, including failures and timeout.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 16,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "histogram_quantile(0.5, sum by (le, pattern) (rate(cache_audit_loader_duration_seconds_bucket[5m])))",
+          "legendFormat": "{{pattern}} p50",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        },
+        {
+          "refId": "B",
+          "expr": "histogram_quantile(0.95, sum by (le, pattern) (rate(cache_audit_loader_duration_seconds_bucket[5m])))",
+          "legendFormat": "{{pattern}} p95",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 7,
+      "title": "Dropped work and isolated failures",
+      "description": "Queue/breaker/cooldown/cancellation and instrumentation failure reasons.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (reason) (rate(cache_audit_dropped_total[5m]))",
+          "legendFormat": "{{reason}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "title": "Circuit breaker",
+      "description": "CLOSED=0, OPEN=1, HALF_OPEN=2. Latest flushed state per instance.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 24,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "cache_audit_breaker_state",
+          "legendFormat": "{{instance}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              },
+              {
+                "color": "yellow",
+                "value": 2
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 9,
+      "title": "Configured-hit coverage",
+      "description": "Matched / all cache hits before sampling in latest interval; absent when no hits.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "cache_audit_coverage",
+          "legendFormat": "{{instance}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percentunit",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.8
+              },
+              {
+                "color": "green",
+                "value": 0.99
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    },
+    {
+      "id": 10,
+      "title": "Skipped checks and audit errors",
+      "description": "Unconfigured, oversized, unsupported, cancelled and comparison/read failures.",
+      "type": "timeseries",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "staleprobe-prometheus"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 32,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "expr": "sum by (pattern, result) (rate(cache_audit_checks_total{result=~\"SKIPPED.*|AUDIT_ERROR\"}[5m]))",
+          "legendFormat": "{{pattern}} {{result}}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "staleprobe-prometheus"
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "ops",
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom"
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      }
+    }
+  ]
+}

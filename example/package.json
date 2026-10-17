@@ -1,0 +1,22 @@
+{
+  "name": "staleprobe-catalog-example",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.6"
+  },
+  "scripts": {
+    "start": "node --env-file=.env server.mjs",
+    "test": "node --test *.test.mjs"
+  },
+  "dependencies": {
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/exporter-prometheus": "^0.223.0",
+    "@opentelemetry/sdk-metrics": "^2.12.0",
+    "express": "^5.1.0",
+    "ioredis": "^5.8.0",
+    "pg": "^8.16.0",
+    "staleprobe": "file:.."
+  }
+}

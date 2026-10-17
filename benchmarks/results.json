@@ -1,0 +1,199 @@
+{
+  "measuredAt": "2026-10-17T06:47:54.410Z",
+  "node": "v24.18.0",
+  "platform": "win32 10.0.26200 x64",
+  "cpu": "Intel(R) Core(TM) 3 100U",
+  "logicalCpus": 8,
+  "memoryGiB": 15.64910888671875,
+  "samplesPerTrial": 50000,
+  "warmupPerMode": 5000,
+  "trials": 3,
+  "results": {
+    "direct": {
+      "p50Us": 0.09999999974752427,
+      "p95Us": 0.10000000020227162,
+      "p99Us": 0.10000000020227162,
+      "throughputPerSecond": 7728094.71552877,
+      "overhead": {
+        "p50Us": {
+          "absoluteUs": 0,
+          "percent": 0
+        },
+        "p95Us": {
+          "absoluteUs": 0,
+          "percent": 0
+        },
+        "p99Us": {
+          "absoluteUs": 0,
+          "percent": 0
+        }
+      }
+    },
+    "disabled": {
+      "p50Us": 0.09999999997489795,
+      "p95Us": 0.10000000020227162,
+      "p99Us": 0.2000000000066393,
+      "throughputPerSecond": 7511793.515819952,
+      "overhead": {
+        "p50Us": {
+          "absoluteUs": 2.2737367544323206e-10,
+          "percent": 2.2737367544323206e-7
+        },
+        "p95Us": {
+          "absoluteUs": 0,
+          "percent": 0
+        },
+        "p99Us": {
+          "absoluteUs": 0.09999999980436769,
+          "percent": 99.99999960209607
+        }
+      }
+    },
+    "sampled-out": {
+      "p50Us": 1.4000000001033186,
+      "p95Us": 2.8999999999541615,
+      "p99Us": 6.200000000262662,
+      "throughputPerSecond": 481111.0972123476,
+      "overhead": {
+        "p50Us": {
+          "absoluteUs": 1.3000000003557943,
+          "percent": 1300.0000036379788
+        },
+        "p95Us": {
+          "absoluteUs": 2.79999999975189,
+          "percent": 2799.9999940882844
+        },
+        "p99Us": {
+          "absoluteUs": 6.1000000000603904,
+          "percent": 6099.9999877218215
+        }
+      }
+    },
+    "enqueued": {
+      "p50Us": 0.30000000060681487,
+      "p95Us": 0.9000000000014552,
+      "p99Us": 3.299999999399006,
+      "throughputPerSecond": 31772.575463361703,
+      "overhead": {
+        "p50Us": {
+          "absoluteUs": 0.2000000008592906,
+          "percent": 200.00000136424205
+        },
+        "p95Us": {
+          "absoluteUs": 0.7999999997991836,
+          "percent": 799.9999981810106
+        },
+        "p99Us": {
+          "absoluteUs": 3.1999999991967343,
+          "percent": 3199.9999927240424
+        }
+      }
+    }
+  },
+  "measurements": {
+    "direct": [
+      {
+        "p50Us": 0.10000000003174137,
+        "p95Us": 0.2000000000066393,
+        "p99Us": 0.4000000000132786,
+        "throughputPerSecond": 4503693.028283202,
+        "completed": 0,
+        "dropped": 0
+      },
+      {
+        "p50Us": 0.09999999974752427,
+        "p95Us": 0.10000000020227162,
+        "p99Us": 0.10000000020227162,
+        "throughputPerSecond": 9589934.404848685,
+        "completed": 0,
+        "dropped": 0
+      },
+      {
+        "p50Us": 0.09999999929277692,
+        "p95Us": 0.10000000020227162,
+        "p99Us": 0.10000000020227162,
+        "throughputPerSecond": 7728094.71552877,
+        "completed": 0,
+        "dropped": 0
+      }
+    ],
+    "disabled": [
+      {
+        "p50Us": 0.09999999997489795,
+        "p95Us": 0.10000000003174137,
+        "p99Us": 0.2000000000066393,
+        "throughputPerSecond": 6245394.021908845,
+        "completed": 0,
+        "dropped": 0
+      },
+      {
+        "p50Us": 0.09999999974752427,
+        "p95Us": 0.10000000020227162,
+        "p99Us": 0.5000000001018634,
+        "throughputPerSecond": 7511793.515819952,
+        "completed": 0,
+        "dropped": 0
+      },
+      {
+        "p50Us": 0.10000000020227162,
+        "p95Us": 0.10000000020227162,
+        "p99Us": 0.10000000020227162,
+        "throughputPerSecond": 9160696.94582392,
+        "completed": 0,
+        "dropped": 0
+      }
+    ],
+    "sampled-out": [
+      {
+        "p50Us": 1.4000000000464752,
+        "p95Us": 4.500000000007276,
+        "p99Us": 11.200000000030741,
+        "throughputPerSecond": 382893.2485965048,
+        "completed": 0,
+        "dropped": 0
+      },
+      {
+        "p50Us": 1.4000000001033186,
+        "p95Us": 2.300000000104774,
+        "p99Us": 5.099999999856664,
+        "throughputPerSecond": 486659.68472239014,
+        "completed": 0,
+        "dropped": 0
+      },
+      {
+        "p50Us": 1.4000000001033186,
+        "p95Us": 2.8999999999541615,
+        "p99Us": 6.200000000262662,
+        "throughputPerSecond": 481111.0972123476,
+        "completed": 0,
+        "dropped": 0
+      }
+    ],
+    "enqueued": [
+      {
+        "p50Us": 0.3999999998995918,
+        "p95Us": 1.3000000001284207,
+        "p99Us": 4.30000000005748,
+        "throughputPerSecond": 26736.69541930892,
+        "completed": 50000,
+        "dropped": 0
+      },
+      {
+        "p50Us": 0.3000000001520675,
+        "p95Us": 0.9000000000014552,
+        "p99Us": 3.000000000156433,
+        "throughputPerSecond": 31772.575463361703,
+        "completed": 50000,
+        "dropped": 0
+      },
+      {
+        "p50Us": 0.30000000060681487,
+        "p95Us": 0.9000000000014552,
+        "p99Us": 3.299999999399006,
+        "throughputPerSecond": 34413.203602897236,
+        "completed": 50000,
+        "dropped": 0
+      }
+    ]
+  }
+}
