@@ -20,7 +20,7 @@
 - Live PostgreSQL/Redis/Docker Compose, Prometheus scraping from a container and Grafana rendering/query execution: Docker was not installed. YAML/JSON validation, actual metrics-text tests and injected HTTP tests do not establish the full service stack works on this machine.
 - The core suite also passed locally with npm-provided Node 20.20.2 and 22.23.3 runtimes; remote GitHub Actions subsequently passed on Node 20/22/24.
 - README's illustrative external HTTP backend: it is not a real service. The runnable PostgreSQL example provides the complete application wiring instead.
-- Initial npm publication: pending npm account authentication. A registry lookup returned 404 on October 17, 2026, but no package name was reserved. Maintainer/repository metadata now points to Ragul20070504/staleprobe. A live-service smoke test remains unverified locally.
+- Initial npm release metadata: staleprobe@0.1.0, npm maintainer ragul2007, source Ragul20070504/staleprobe. CLI authentication was verified. The [npm listing](https://www.npmjs.com/package/staleprobe) is the authoritative publication record. A live-service smoke test remains unverified locally.
 
 ## Self-review refinements and deviations
 
@@ -31,4 +31,4 @@
 - Shutdown cancels instead of draining. It normally completes after cancellation microtasks and at most three sequential exportTimeoutMs waits (an in-progress flush, final flush and exporter shutdown). Synchronous user code can still block Node's event loop.
 - No lint tool was configured; strict type checking and focused behavior tests are the automated code checks. No release or hosted CI execution is claimed.
 
-The implementation, local checks and hosted CI are complete. A full live PostgreSQL/Redis/Prometheus/Grafana demo remains unverified; npm publication still requires account authentication.
+The implementation, local checks and hosted CI are complete. A full live PostgreSQL/Redis/Prometheus/Grafana demo remains unverified. Consult the npm registry listing for public release availability.
