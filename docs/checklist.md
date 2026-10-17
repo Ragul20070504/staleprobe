@@ -20,6 +20,6 @@
 - [x] Execute local core tests on Node 20/22/24.
 - [x] Execute GitHub Actions and inspect remote results: https://github.com/Ragul20070504/staleprobe/actions/runs/39012038895.
 - [x] Add real maintainer/repository metadata for Ragul20070504/staleprobe; recheck registry name (404 before initial release).
-- [ ] Publish the initial npm release and verify a registry installation.
+- [x] Publish staleprobe@0.1.0 and verify `npm install staleprobe` from the public registry, ESM/CJS imports and a background FRESH check.
 
 See [validation.md](validation.md) for exact evidence, deviations and limitations.

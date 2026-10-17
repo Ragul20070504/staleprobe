@@ -13,6 +13,7 @@
 - Benchmarks measure three trials of 50,000 samples per path after 5,000 warm-up reads per path. See benchmarks.md and the checked-in raw JSON; numbers are local mock results, not production claims.
 - Local source validation: 59 tests passed and one real-Redis test skipped on Node 20.20.2, 22.23.3 and 24.18.0; two example tests passed. Hosted CI then passed with real Redis enabled on Node 20/22/24. No test failures remain. The final Windows/Node 24 run measured sampled-out p50/p95/p99 of 1.4/2.9/6.2 microseconds versus 0.1/0.1/0.1 direct, a p99 overhead of 6.1 microseconds. The release package contains 32 allowlisted files including CHANGELOG.md; the exact dry-run byte size can change with documentation updates.
 - The public source is available at https://github.com/Ragul20070504/staleprobe, under the confirmed maintainer profile. The initial source commit is b2d1922.
+- staleprobe@0.1.0 is published publicly at https://www.npmjs.com/package/staleprobe with the `latest` tag. A clean consumer successfully ran `npm install staleprobe`, resolved version 0.1.0, imported ESM and CommonJS and completed an asynchronous FRESH verification without ioredis installed. The registry tarball SHA-1 is `1025abacb8f97d037fd5ba9c9ef308e0ba3ef274`, matching the submitted artifact. Source commit d25d7bf is tagged v0.1.0. npm initially exposed a temporary placeholder while processing the upload; verification was repeated after the real version became public.
 
 ## Explicitly unverified
 
@@ -31,4 +32,4 @@
 - Shutdown cancels instead of draining. It normally completes after cancellation microtasks and at most three sequential exportTimeoutMs waits (an in-progress flush, final flush and exporter shutdown). Synchronous user code can still block Node's event loop.
 - No lint tool was configured; strict type checking and focused behavior tests are the automated code checks. No release or hosted CI execution is claimed.
 
-The implementation, local checks and hosted CI are complete. A full live PostgreSQL/Redis/Prometheus/Grafana demo remains unverified. Consult the npm registry listing for public release availability.
+The implementation, local checks, hosted CI and initial public npm release are complete. A full live PostgreSQL/Redis/Prometheus/Grafana demo remains unverified.
