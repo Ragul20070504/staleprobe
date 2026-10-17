@@ -105,7 +105,8 @@ try {
 
   await until('Prometheus scrape', () => query('up{job="staleprobe-catalog"}'), result => result.some(r => Number(r.value[1]) === 1));
   const staleQuery = 'sum by (pattern) (cache_audit_checks_total{result="STALE"})';
-  const staleSeries = await until('Prometheus STALE series', () => query(staleQuery), result => result.some(r => r.metric.pattern === 'product:*' && Number(r.value[1]) > 0));
+  const expectedStale = checkCount(finalMetrics, 'STALE');
+  const staleSeries = await until('Prometheus latest STALE scrape', () => query(staleQuery), result => result.some(r => r.metric.pattern === 'product:*' && Number(r.value[1]) >= expectedStale));
   const ratio = await query('sum by (pattern) (cache_audit_checks_total{result="STALE"}) / sum by (pattern) (cache_audit_checks_total{result=~"FRESH|STALE"})');
   assert.ok(ratio.some(r => r.metric.pattern === 'product:*' && Number(r.value[1]) > 0 && Number(r.value[1]) <= 1));
   evidence.checks.prometheus = { stale: staleSeries, stalenessRate: ratio };
@@ -120,6 +121,7 @@ try {
       const result = await query(target.expr, true);
       if (panel.title === 'Staleness rate by pattern') {
         assert.ok(result.some(r => Number(r.value[1]) > 0), 'Grafana rate panel must have stale data after two observations');
+        evidence.checks.grafanaStalenessRate = result;
       }
     }
     evidence.panels.push({ title: panel.title, validQueries: panel.targets.length });

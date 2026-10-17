@@ -47,6 +47,7 @@
     "example/app.mjs",
     "example/server.mjs",
     "example/telemetry.mjs",
+    "example/smoke.mjs",
     "example/package.json",
     "example/compose.yaml",
     "example/.env.example",
