@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node --env-file=.env server.mjs",
-    "test": "node --test *.test.mjs"
+    "test": "node --test *.test.mjs",
+    "smoke": "node --env-file=.env smoke.mjs"
   },
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
@@ -18,5 +19,8 @@
     "ioredis": "^5.8.0",
     "pg": "^8.16.0",
     "staleprobe": "file:.."
+  },
+  "devDependencies": {
+    "playwright": "^1.64.1"
   }
 }

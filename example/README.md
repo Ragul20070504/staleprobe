@@ -27,3 +27,16 @@ Metrics: [localhost:9464/metrics](http://localhost:9464/metrics). Prometheus: [l
 `npm --prefix example test` verifies the HTTP cache/update flow with injected dependencies. `REDIS_URL` enables the separate core real-Redis test. `docker compose -f example/compose.yaml config` validates Compose with Docker installed. Stop with `docker compose -f example/compose.yaml down`. The SQL initializes only a fresh PostgreSQL data directory.
 
 The pg loader uses a bounded query timeout and checks AbortSignal before and after its query; pg may continue a query after cancellation. SDK outstanding slots remain occupied until it settles. The example is for local demonstrations and intentionally omits authentication and cache invalidation.
+
+## Full-stack smoke test
+
+With the Compose services and app above running, install Chromium once and run:
+
+```sh
+npm --prefix example exec -- playwright install --with-deps chromium
+npm --prefix example run smoke
+```
+
+Use a disposable demo database/cache: this test deletes only the `product:1` fixture before the application populates it, then updates product 1's PostgreSQL price to demonstrate divergence. During auditing it monitors Redis command names and requires zero mutations, verifies decreasing TTL, observes FRESH and two STALE checks using the normal 30-second cooldown, and checks Prometheus scrapes and all ten Grafana panel queries. Chromium loads the actual provisioned dashboard and saves a screenshot. Expect about 70–100 seconds after services are ready.
+
+Evidence is saved under `example/artifacts/`: `full-stack.json`, `metrics.txt` and `grafana.png`. GitHub Actions runs this as the **Full Docker demo** job, uploads the evidence and service logs as the **full-docker-demo** artifact, then stops all containers. This adds no production SDK dependency; Playwright is an example-only development dependency.

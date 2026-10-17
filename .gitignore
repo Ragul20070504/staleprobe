@@ -5,3 +5,6 @@ coverage/
 .env
 example/.env
 benchmarks/latest.json
+example/artifacts/
+example/server.log
+example/server.pid

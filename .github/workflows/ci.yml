@@ -27,3 +27,44 @@ jobs:
       - run: npm --prefix example ci
       - run: npm --prefix example test
       - run: docker compose -f example/compose.yaml config --quiet
+  demo:
+    name: Full Docker demo
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            example/package-lock.json
+      - run: npm ci
+      - run: npm run build
+      - run: npm --prefix example ci
+      - run: npm --prefix example exec -- playwright install --with-deps chromium
+      - name: Run real services and end-to-end smoke test
+        run: |
+          cp example/.env.example example/.env
+          docker compose -f example/compose.yaml up -d --wait
+          (cd example && exec node --env-file=.env server.mjs) > example/server.log 2>&1 &
+          echo $! > example/server.pid
+          npm --prefix example run smoke
+      - name: Collect service evidence
+        if: always()
+        run: |
+          mkdir -p example/artifacts
+          docker compose -f example/compose.yaml ps --all > example/artifacts/services.txt
+          docker compose -f example/compose.yaml logs --no-color > example/artifacts/compose.log
+          cp example/server.log example/artifacts/server.log 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: full-docker-demo
+          path: example/artifacts/
+      - name: Stop demo services
+        if: always()
+        run: |
+          if [ -f example/server.pid ]; then kill "$(cat example/server.pid)" || true; fi
+          docker compose -f example/compose.yaml down
